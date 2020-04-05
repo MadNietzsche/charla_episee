@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Simulación del modelo SIR</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="  Antonio Alvarez   <span>&lt;i class="fab  fa-linkedin faa-float animated "&gt;&lt;/i&gt;&amp;nbsp;aaalvarez94</span>" />
+    <link href="libs/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link href="libs/font-awesome-animation-1.0/font-awesome-animation-emi.css" rel="stylesheet" />
+    <script src="libs/fontawesome-5.0.13/js/fontawesome-all.min.js"></script>
+    <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+    <script src="libs/pymjs-1.3.2/pym.v1.js"></script>
+    <script src="libs/widgetframe-binding-0.3.1/widgetframe.js"></script>
+    <link rel="stylesheet" href="assets\custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Simulación del modelo SIR
+## Modelación Epidemiológica en R
+### <br><br>Antonio Alvarez   <span>&lt;i class="fab  fa-linkedin faa-float animated "&gt;&lt;/i&gt;&amp;nbsp;aaalvarez94</span>
+### <br>5.04.2020<br><br><span>&lt;i class="fas  fa-envelope faa-vertical animated " style=" color:white;"&gt;&lt;/i&gt;&amp;nbsp;aqalag94@gmail.com</span>
+
+---
+
+
+
+
+layout: false
+class: split-two white
+
+.column.bg-main1[.content.vmiddle.center[
+
+# Fuente
+
+&lt;br&gt;
+
+### Esta charla fue altamente influenciada por el trabajo de Ottar N. Bjornstad y su libro "Epidemics: Models and data using R"
+
+&lt;br&gt;
+
+### Para mas detalles y modelos mas complejos, referirse a este trabajo. El cual lo pueden descargar desde este [link](https://drive.google.com/file/d/16Rrx28WER-rebiUkc8GMiq3sx6P5GrdO/view?usp=sharing).
+
+]]
+.column.bg-main3[.content.vmiddle.center[
+&lt;center&gt;
+ &lt;img src="img/cover.png", width="70%"&gt;
+
+]]
+
+---
+
+# .purple[Modelos Epidemiológicos]
+
+&lt;br&gt;
+
+### Modelos matemáticos que tratan de modelar la evolución de una epidemia en sus diferentes .orange[etapas], teniendo en cuenta una lista *presunciones*
+
+
+&lt;center&gt;
+
+  &lt;img src="img/snow-cholera.png", width="30%"&gt;
+
+&lt;/center&gt;
+
+&lt;br&gt;
+
+### Ayudan a científicos determinar la duración de una epidemia y entender formas de disminuir su impacto en la población en general
+
+
+---
+
+class: split-two white
+
+.column.bg-main1[.content.vmiddle.center[
+
+# .orange[Características de los modelos]
+
+&lt;br&gt;
+
+### Define .orange[ecuaciones diferenciales] evaluadas en la _escala temporal_
+
+&lt;br&gt;
+
+### Poseen parámetros que logran definir la naturaleza de la enfermedad, la distribución de la población y/o intervenciones en salud publica   
+
+&lt;br&gt;
+
+### 2 tipos 
+### - _Deterministas_
+### - _Estocásticas_
+
+]]
+.column.white[.content.vmiddle.center[
+&lt;center&gt;
+ &lt;img src="img/contag.png", width="70%"&gt;
+
+]]
+
+  
+---
+
+class: split-two white
+
+.column.bg-main1[
+.split-two[
+.row.bg-main1[.content.vmiddle[
+
+# .orange[Modelo SIR]
+
+&lt;br&gt;
+
+### Modelo de compartimientos con 3 espacios
+
+
+]]
+
+.row.bg-main2[.content[
+
+
+### 1. El tamaño de la población es constante
+### 2. La velocidad de contagio es proporcional al contacto
+### 3. Los infectados son removidos a una velocidad constante
+
+]]
+
+
+]]
+
+.column.bg-main1[
+
+.split-three[
+.row.bg-main2[.content[
+
+## Susceptibles: `\(S(t)\)`
+
+&lt;br&gt;
+
+### El numero de personas que pueden adquirir la enfermedad
+
+]]
+
+.row.bg-main3[.content[
+
+## Infectados: `\(I(t)\)`
+
+&lt;br&gt;
+
+### El numero de personas que están contagiados
+
+]]
+
+.row.bg-main4[.content[
+
+## Removidos: `\(R(t)\)`
+
+&lt;br&gt;
+
+### Personas que ya no pueden contraer el contagio
+
+]]
+
+]
+
+]
+
+---
+
+class: bg-main3 split-30 hide-slide-number
+
+.column[
+
+]
+.column.slide-in-right[.content.vmiddle[
+.sliderbox.shade_main.pad1[
+.font5[Explicación]
+]
+]]
+
+---
+class: split-two white with-border border-black
+
+.column.center[.content.vmiddle[
+
+# .blue[SIR]
+
+]]
+
+
+.column.bg-main1[.content[
+
+.split-three[
+
+.row.bg-main1[.content[
+
+## Susceptibles
+
+### `\(\frac{dS}{dt}=-\beta I\frac{S}{N} + \mu(N-S)\)`
+
+]]
+
+.row.bg-main1[.content[
+
+## Infectados
+
+### `\(\frac{dI}{dt}=\beta I \frac{S}{N} - (\mu - \gamma)I\)`
+
+
+]]
+
+.row.bg-main1[.content[
+
+## Removidos
+
+### `\(\frac{dR}{dt}=\gamma I - \mu R\)`
+
+]]
+
+]
+
+
+]]
+
+---
+class: split-10
+
+.row.bg-main1.white[.content.vmiddle[
+
+# Implementación en R
+
+]]
+
+.row[
+
+.split-60[
+
+.column.bg-main3[.content[
+
+
+```r
+sirmod &lt;- function(t, y, parms) {
+  # Condiciones iniciales
+  S &lt;- y[1]
+  I &lt;- y[2]
+  R &lt;- y[3]
+  # Parametros del modelo
+  beta &lt;- parms["beta"]
+  mu &lt;- parms["mu"]
+  gamma &lt;- parms["gamma"]
+  N &lt;- parms["N"]
+  # Ecuaciones
+  dS &lt;- mu * (N - S) - beta * S * I/N
+  dI &lt;- beta * S * I/N - (mu + gamma) * I
+  dR &lt;- gamma * I - mu * R
+  res &lt;- c(dS, dI, dR)
+  # Resultados del gradiente
+  list(res)
+}
+```
+
+
+```r
+tiempo &lt;- seq(0, 26, by = 1/10)
+parms &lt;- c(mu = 0, beta = 2, gamma = 1/2, N = 1)
+inic &lt;- c(S = 0.999, I = 0.001, R = 0)
+
+df &lt;- ode(y=inic, times=tiempo, func=sirmod, parms=parms)
+df &lt;- as_tibble(out)
+```
+
+
+]]
+
+.column.bg-main4[.content.center[
+.split-two[
+
+.row.bg-main1[.content.vmiddle[
+
+### Definimos las ecuaciones diferenciales usando una función de 3 parámetros
+
+### - Tiempo
+### - Condiciones iniciales
+### - Parámetros de las e.d. `\(\mu\)`, `\(\beta\)`, `\(\gamma\)`, `\(N\)`
+
+]]
+
+.row.bg-main1[.content.vmiddle[
+
+### Para la integración, usaremos la función `ode` del paquete `deSolve`
+
+### Definimos los vectores para empezar la simulación
+
+]]
+
+]
+
+
+]]
+]]
+]]
+
+
+---
+
+# .blue[Simulación]
+
+<div id="htmlwidget-a57381f70f91d86119bd" style="width:100%;height:100%;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a57381f70f91d86119bd">{"x":{"url":"SIR-charla_files/figure-html//widgets/widget_unnamed-chunk-3.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+
+
+---
+
+class: split-25 bg-white with-border border-black
+
+.row.center.bg-white[.content.vmiddle[
+
+# .black[3 parámetros que necesita un Epidemiólogo]
+
+]]
+
+
+.row[
+.split-three[
+
+.column.bg-main1[.content.vmiddle[
+
+## .red[La velocidad de recuperación/remoción]
+### _Fatality rate_
+&lt;br&gt;
+&lt;center&gt;
+# `\(\alpha\)` 
+
+]]
+
+.column.bg-main1[.content.vmiddle[
+
+## .red[La velocidad de infección]
+### _Infection rate_
+&lt;br&gt;
+&lt;center&gt;
+# `\(\beta\)`
+
+]]
+
+.column.bg-main1[.content.vmiddle[
+
+## .red[Numero de susceptibles]
+### _Susceptible Population_
+&lt;br&gt;
+&lt;center&gt;
+# `\(S\)`
+
+]]
+
+]]
+
+
+---
+
+# `\(\alpha\)`
+
+&lt;center&gt;
+  &lt;img src="img/rec.png", width="60%"&gt;
+
+---
+
+# `\(\beta\)`
+
+&lt;center&gt;
+  &lt;img src="img/inf.png", width="40%"&gt;
+  
+---
+layout: true
+class: split-two bg-white with-border border-white
+
+.column[.split-four[
+
+.row.bg-main1[.content[
+
+## Depende de muchos parámetros y presunciones
+
+]]
+
+.row.bg-main2[.content[
+
+## Siempre necesitara recoger datos 
+
+]]
+
+.row.bg-main3[.content[
+
+## Hay que convivir con alta incertidumbre
+
+]]
+
+.row.bg-main4[.content[
+
+## .orange['Todos modelos están mal, pero algunos son útiles' - E.P. Box, FRS]
+
+]]
+
+]]
+
+.column.bg-white[.content[
+
+# .orange[Epidemiología es compleja...]
+
+&lt;br&gt;
+
+&lt;center&gt;
+  &lt;img src="img/turtles.png", width="60%"&gt;
+
+
+]]
+
+---
+class: hide-row2-col1 hide-row3-col1 hide-row4-col1
+count: false
+
+---
+class: hide-row3-col1 hide-row4-col1 
+count: false
+
+---
+class: hide-row4-col1 
+count: false
+
+---
+count:false
+
+---
+count: false
+layout: false
+
+# .orange[Mas lecturas]
+
+### - Bjørnstad, O., 2018. Epidemics: models and data with R. Springer Science+Business Media, New York, NY.
+### - D’Souza, G., 2020. Fighting COVID-19 with Epidemiology: A Johns Hopkins Teach-Out. URL https://www.coursera.org/learn/covid19-epidemiology
+### - Koerth, M., Bronner, L., Mithani, J., n.d. Why It’s So Freaking Hard To Make A Good COVID-19 Model. URL https://fivethirtyeight.com/features/why-its-so-freaking-hard-to-make-a-good-covid-19-model/
+### - Rock, T., n.d. Oxford Mathematician explains SIR disease model for COVID-19 (Coronavirus). URL https://www.youtube.com/watch?v=NKMHhm2Zbkw
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
